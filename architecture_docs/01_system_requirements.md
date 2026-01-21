@@ -58,20 +58,47 @@ This system aims to create an intelligent, adaptive DM that can manage complex n
 
 ### 3. Memory & History Management
 
-#### Session Logging
+#### Hierarchical Structure ✅ *Implemented*
+- **Session**: A full play session (e.g., "Evening Game - Jan 21")
+  - Contains multiple Scenes
+  - Tracks session-level metadata and statistics
+  - Persists to JSON for resumability
+
+- **Scene**: A narrative unit within a session (e.g., "The Heist Planning")
+  - Contains related Events
+  - Tracks location, participants, and time bounds
+  - Can be closed with optional summary
+  - Enables natural narrative breaks
+  - Supports automatic or manual scene transitions
+
+- **Event**: Individual actions/narrations within a Scene
+  - Timestamped and typed (narration, action, roll, dialogue, etc.)
+  - Includes actor and optional metadata
+  - Forms the granular log of what happened
+
+#### Session Logging ✅ *Implemented*
 - Automatic timestamped log of all events
-- Capture dialogue, actions, and outcomes
-- Tag events by type (combat, social, exploration, etc.)
+- Hierarchical organization: Session → Scenes → Events
+- Tag events by type (narration, player_action, dice_roll, npc_action, npc_dialogue, system, tool_call, state_change)
 - Mark significant narrative moments
 - Record dice rolls and mechanical outcomes
+- Auto-saves to JSON after each event
 
-#### Session Titling & Retrieval
-- Generate descriptive titles for sessions
+#### Context Management ✅ *Implemented*
+- Smart context building for LLM consumption
+- Include full events from current scene
+- Include full events from N recent scenes
+- Include summaries from older scenes
+- Optimizes token usage while maintaining narrative continuity
+
+#### Session Titling & Retrieval *(Future)*
+- Generate descriptive titles for sessions and scenes
 - Create searchable session summaries
 - Tag sessions by themes, locations, and involved characters
 - Enable temporal queries ("What happened in the dragon's lair?")
 
-#### Memory Summarization
+#### Memory Summarization *(Future)*
+- Auto-generate scene summaries when scene closes
 - Generate session recaps
 - Create "Previously on..." summaries for session starts
 - Compress older sessions into key facts
@@ -204,6 +231,54 @@ This system aims to create an intelligent, adaptive DM that can manage complex n
 - Identify pacing issues
 - Detect when players are stuck or confused
 - Adjust challenge and complexity dynamically
+
+### 19. Game-System Specific Features *(Future Enhancements)*
+
+While the core system is game-agnostic, specific game systems benefit from specialized support:
+
+#### Blades in the Dark
+- **Clocks**: Progress and danger clocks with segments
+  - Track ongoing projects and threats
+  - Advance clocks based on actions and downtime
+  - Visual representation of tension and progress
+
+- **Scores** (Heists/Missions):
+  - Plan type selection (Assault, Deception, Stealth, etc.)
+  - Detail determination
+  - Flashback support
+  - Structured engagement rolls
+  - Consequences tracking
+
+- **Faction Game**:
+  - Faction turn automation
+  - Tier and hold tracking
+  - Inter-faction conflict resolution
+  - Claim map management
+
+- **Heat & Wanted Level**:
+  - Automatic heat generation
+  - Entanglement rolls
+  - Wanted level tracking per faction
+
+- **Stress, Trauma, and Vice**:
+  - Track character stress and trauma
+  - Vice indulgence scenes
+  - Trauma condition application
+
+#### Quest and Arc Tracking *(Future)*
+- Define major story arcs and quests
+- Track quest status (active, completed, failed, abandoned)
+- Link scenes and events to quest progression
+- Identify key plot milestones
+- Generate quest summaries
+- Detect when quest conditions are met
+
+#### Clock System *(Future - To be added to utilities)*
+- Generic clock implementation for any game system
+- Configurable segments (typically 4, 6, or 8)
+- Clock types: progress, danger, faction, long-term project
+- Advance/tick clocks based on actions
+- Completion triggers and callbacks
 
 ## Success Metrics
 

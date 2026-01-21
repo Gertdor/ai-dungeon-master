@@ -5,12 +5,23 @@
 The primary orchestrator and world manager.
 
 ### Memory & State Management
-- `create_session_log` - Create new session with metadata
-- `append_to_session_log` - Add event to current session log
+
+**Session & Scene Management** ✅ *Core Implemented*
+- `log_event` - Add event to current scene *(Implemented)*
+- `start_scene` - Begin new narrative scene with title and location *(Implemented)*
+- `end_scene` - Close current scene with optional summary *(Implemented)*
+- `get_context_for_llm` - Get smart context with scene hierarchy *(Implemented)*
+- `get_recent_context` - Get last N events formatted for display *(Implemented)*
+- `get_events` - Query events with filtering by type, actor, scene *(Implemented)*
+- `get_all_events` - Get all events across all scenes *(Implemented)*
+- `get_summary` - Get session statistics including scenes *(Implemented)*
+
+**Future Enhancements**
+- `create_session_log` - Create new session with metadata *(Implemented as __init__)*
 - `query_session_history` - Search past events by keywords, participants, location, timeframe
-- `create_session_summary` - Generate summary of session with title
+- `create_session_summary` - Auto-generate summary with AI
 - `create_memory_snapshot` - Create compressed memory for long-term storage
-- `retrieve_memories` - Fetch relevant memories based on context
+- `retrieve_memories` - Semantic search across all sessions
 - `update_world_state` - Modify global world state (time, politics, economy, etc.)
 - `query_world_state` - Get current state of world variables
 
@@ -216,3 +227,40 @@ Available to multiple agent types with appropriate permissions.
 - All tool calls are logged and can be audited
 - Sensitive information (player plans, DM notes) is access-controlled
 - Tool permissions can be dynamically adjusted by DM
+
+## Game-System Specific Tools *(Future)*
+
+### Blades in the Dark Tools
+
+**Clock Management** *(To be added to utilities)*
+- `create_clock` - Create progress/danger/faction clock with segments
+- `advance_clock` - Tick a clock forward
+- `check_clock` - Query clock status
+- `complete_clock` - Mark clock as filled with consequences
+
+**Score (Heist) Management**
+- `start_score` - Begin a score with plan type and detail
+- `set_engagement_roll` - Determine starting position
+- `trigger_flashback` - Handle flashback scene with stress cost
+- `resolve_score` - Handle score completion and payoff
+
+**Faction Turn**
+- `execute_faction_turn` - Run faction turn automation
+- `roll_entanglement` - Generate consequence from heat
+- `update_faction_clock` - Advance faction project clocks
+- `process_claims` - Handle faction claims and territories
+
+**Character Mechanics**
+- `track_stress` - Add/remove stress from character
+- `trigger_trauma` - Apply trauma condition
+- `indulge_vice` - Handle vice scene and stress relief
+- `update_heat` - Modify crew heat level
+- `update_wanted_level` - Change wanted level with faction
+
+### Quest & Arc Tools *(Future - Game Agnostic)*
+- `create_quest` - Define quest with objectives and rewards
+- `update_quest_status` - Mark quest progress or completion
+- `link_event_to_quest` - Associate event with quest advancement
+- `get_active_quests` - List all in-progress quests
+- `check_quest_completion` - Evaluate if quest conditions met
+- `generate_quest_summary` - Create quest recap for players

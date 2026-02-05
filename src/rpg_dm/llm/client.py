@@ -34,6 +34,22 @@ class LLMClient:
             base_url=self.config.openrouter_base_url,
         )
 
+    @staticmethod
+    def _serialize_tool_calls(tool_calls: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Serialize tool calls for the API, ensuring arguments is a JSON string."""
+        return [
+            {
+                **tc,
+                "function": {
+                    **tc["function"],
+                    "arguments": json.dumps(tc["function"]["arguments"])
+                    if isinstance(tc["function"]["arguments"], dict)
+                    else tc["function"]["arguments"],
+                },
+            }
+            for tc in tool_calls
+        ]
+
     def chat(
         self,
         messages: list[ChatMessage],
@@ -66,7 +82,7 @@ class LLMClient:
                 "content": msg.content,
                 **({"name": msg.name} if msg.name else {}),
                 **({"tool_call_id": msg.tool_call_id} if msg.tool_call_id else {}),
-                **({"tool_calls": msg.tool_calls} if msg.tool_calls else {}),
+                **({"tool_calls": self._serialize_tool_calls(msg.tool_calls)} if msg.tool_calls else {}),
             }
             for msg in messages
         ]
@@ -155,7 +171,7 @@ class LLMClient:
                 "content": msg.content,
                 **({"name": msg.name} if msg.name else {}),
                 **({"tool_call_id": msg.tool_call_id} if msg.tool_call_id else {}),
-                **({"tool_calls": msg.tool_calls} if msg.tool_calls else {}),
+                **({"tool_calls": self._serialize_tool_calls(msg.tool_calls)} if msg.tool_calls else {}),
             }
             for msg in messages
         ]
